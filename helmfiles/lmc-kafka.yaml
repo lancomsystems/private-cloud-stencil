@@ -11,14 +11,14 @@ repositories:
 releases:
   - name: strimzi-operator-crds
     chart: lancom-internal/strimzi-operator-crds
-    namespace: lmc-operators
+    namespace: operators-kafka
     wait: true
     values:
       - kubectlImage: bitnami/kubectl:1.23.5
 
   - name: lmc-strimzi
     chart: strimzi/strimzi-kafka-operator
-    namespace: lmc-operators
+    namespace: operator-kafka
     version: 0.38.0
     values:
       - ../values/strimzi-values.yaml
@@ -31,6 +31,7 @@ releases:
     namespace: lmc
     values:
       - ../values/kafka-values.yaml
+
 #  - name: lmc-kafka-console
 #    chart: redpanda/console
 #    version: 0.5.0

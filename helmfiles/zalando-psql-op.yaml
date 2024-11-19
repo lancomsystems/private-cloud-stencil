@@ -3,7 +3,7 @@ repositories:
     url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
 
 releases:
-  - name: postgres-operator
+  - name: operator-postgres
     chart: zalando/postgres-operator
     version: 1.10.1
     namespace: postgres-operator

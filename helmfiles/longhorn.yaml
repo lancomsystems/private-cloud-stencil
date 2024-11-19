@@ -1,0 +1,13 @@
+repositories:
+  - name: longhorn
+    url: https://charts.longhorn.io
+
+releases:
+  - name: longhorn
+    namespace: longhorn
+    chart: longhorn/longhorn
+    version: 1.6
+    createNamespace: true
+    wait: true
+    values:
+      - ../values/longhorn-values.yaml

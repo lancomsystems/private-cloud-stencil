@@ -75,7 +75,7 @@ global:
   imagePullSecrets: ["packages-cloud-lancom-de"]
   imagePullSecretName: "packages-cloud-lancom-de"
   lmc:
-    gmapsApiKey: AIzaSyCgmAyuEJsvZAP4JsUb_IJqOlJh6M-1O3o
+    gmapsApiKey: yourKey
     enableLta: true
   registry:
     password: un
@@ -311,7 +311,7 @@ service-licenses:
       licensingMigrationScopeAllData:
         enabled: true
     licenses:
-      billing-email: "manuel.schwandt@lancom.de"
+      billing-email: "mail.adr@lancom.de"
       supported-keys:
         - KEY_LMC_DEVELOPMENT
         - KEY_LMC_A
@@ -506,14 +506,14 @@ postgresqlZPO:
   enabled: true
   volume:
     size: 30Gi
-    storageClassName: "sys11-quobyte-external-provisioner"
+    storageClassName: "md2"
 
 #####################
 ###### ActiveMQ #####
 #####################
 
 activemq:
-  storageClass: sys11-quobyte-external-provisioner
+  storageClass: "md2"
   replicaCount: 2
   resources:
     limits:
@@ -528,7 +528,7 @@ activemq:
 #####################
 
 cassandra:
-  storageClass: sys11-quobyte-external-provisioner
+  storageClass: "md1"
   resources:
     limits:
       cpu: "2"
@@ -567,8 +567,10 @@ lmc-clickhouse:
     shardsCount: 1
   volumes:
     data:
+      storageClassName: "md1"
       size: 30Gi
     log:
+      storageClassName: "md1"
       size: 15Gi
   configurationFiles:
     # Configuration options from https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
@@ -605,6 +607,7 @@ lmc-zookeeper:
       cpu: 250m
   #dataLogDir: /zookeeper/logs
   persistence:
+    storageClass: "md2"
     size: 1Gi # dataDir
     dataLogDir:
       size: 1Gi

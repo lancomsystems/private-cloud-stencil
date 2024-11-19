@@ -1,0 +1,32 @@
+namespace: external-dns
+policy: sync
+provider:
+  name: webhook
+  webhook:
+    image:
+      repository: docker.packages.cloud.lancom.de/mconfalonieri/external-dns-hetzner-webhook
+      tag: v0.6.0
+    env:
+      - name: HETZNER_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: hetzner-credentials
+            key: api-key
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 8080
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: 8080
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+
+imagePullSecrets:
+  - name: packages-cloud-lancom-de
+
+txtPrefix: "plmc-"
+txtSuffix: "-INSTANCE-NAME"

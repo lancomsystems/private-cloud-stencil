@@ -1,0 +1,776 @@
+#####################
+####### USAGE #######
+#####################
+
+# For skaffolding toggle services here:
+use:
+  activemq: true
+  arc: true
+  auth: true
+  backstage: true
+  cassandra: true
+  clientaccess: true
+  clickhouse: true
+  config: true
+  control: true
+  devices: true
+  devicetunnel: true
+  discovery: true
+  dsc: true
+  dyndns: false
+  fields: true
+  geolocation: true
+  hotspot: true
+  jobs: true
+  licenses: true
+  lmc-ingress: true
+  messaging: true
+  monitoring: true
+  monitor-entry: true
+  monitor-junktion: true
+  monitoring-services: true
+  notification: true
+  pairing: true
+  preferences: true
+  service-rollout-assistant: true
+  uf-translator: true
+  ui: true
+
+  # legacy PSQL! do not touch or lose your data:
+  postgres: false
+  haproxy-ingress: false
+  haproxy-tls: false
+  edge: false
+
+#####################
+#### MAINTENANCE ####
+#####################
+
+# Setting this true, will disrupt the 'use' section.
+# If not wanted keep it commented out!
+# If uncomment all services with connection to Postgresql off.
+
+#maintenance:
+#  runServices: false
+
+#####################
+###### GLOBAL  ######
+#####################
+
+global:
+  # To turn on the API Usage Collection you should turn on 'apiUsageCollection.filter'
+  # Hint: Kafka is required to use this!
+  apiUsageCollection:
+    # Turn on debug switch means, that the API Usage is sent to standard
+    # Hint: only works if 'kafka' is set to 'false'
+    debug: false
+    # To sent data to kafka set 'kafka' to true.
+    kafka: true
+    filter: true
+  earlyAccess:
+    projectIds:
+      - 797da72a-e800-4eca-bf63-6cfb8a3fedf1
+  deployPrometheusRules: true
+  imagePullPolicy: "IfNotPresent"
+  imagePullSecrets: ["packages-cloud-lancom-de"]
+  imagePullSecretName: "packages-cloud-lancom-de"
+  lmc:
+    gmapsApiKey: AIzaSyCgmAyuEJsvZAP4JsUb_IJqOlJh6M-1O3o
+    enableLta: true
+  registry:
+    password: un
+    username: pw
+  infrastructure:
+    onPremise: true
+  usePredefinedPriorityClasses: true
+  # Important for Alpha Features! isNotProduction is needed for a Zero State like in a Squad Cluster or early Demo
+  isNotProduction: true
+  cloudPrefix: LCD
+  cloud-prefix: LCD
+  frontend:
+    rootUrl: https://demo.lancom.dev
+  baseUrl: https://demo.lancom.dev
+  datasource:
+    secretName:
+      dbPassword: cloud.psql-lmc.credentials.postgresql.acid.zalan.do
+
+ignored-random: 11111111
+
+#####################
+##### SERVICES  #####
+#####################
+
+#####################
+######   ARC   ######
+#####################
+
+service-arc:
+  replicaCount: 1
+
+#####################
+######   AUTH  ######
+#####################
+
+service-auth:
+  debuggingPortOpen: true
+  configuration:
+    auth:
+      twoFactorRequiredInRootAccount: true
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: "1"
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 768Mi
+
+#####################
+##### BACKSTAGE #####
+#####################
+
+service-backstage:
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 50m
+      memory: 350Mi
+
+#####################
+#### CLIENTACCESS ###
+#####################
+
+service-clientaccess:
+  environment:
+    jwtSecret: TestTestTest
+  replicaCount: 2
+  configuration:
+    logging:
+      level:
+        de.lcs.lmc.service.clientaccess.service: DEBUG
+  kafka:
+    configMapRef: kafka-connection-params
+
+#####################
+#####  CONFIG  ######
+#####################
+
+service-config:
+  configuration:
+    features:
+      ztna:
+        enabled: true
+      checkLtaFirmwareVersion:
+        enabled: false
+      ufFullTunnel:
+        enabled: true
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: "2"
+      memory: 4Gi
+    requests:
+      cpu: 100m
+      memory: 2Gi
+
+#####################
+#####  CONTROL  #####
+#####################
+
+service-control:
+  configuration: {}
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: "1"
+      memory: 1Gi
+    requests:
+      cpu: 50m
+      memory: 512Mi
+
+#####################
+#####  DEVICES  #####
+#####################
+
+service-devices:
+  configuration: {}
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: "1"
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+
+#####################
+### DEVICETUNNEL ####
+#####################
+
+service-devicetunnel:
+  configuration: {}
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: "1"
+      memory: 1Gi
+    requests:
+      cpu: 50m
+      memory: 512Mi
+
+#####################
+######   DSC   ######
+#####################
+
+service-dsc-alpha:
+  configuration: {}
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: "1"
+      memory: 1Gi
+    requests:
+      cpu: 50m
+      memory: 400Mi
+
+#####################
+#####  DYNDNS   #####
+#####################
+
+service-dyndns:
+  configuration: {}
+  replicaCount: 0
+
+#####################
+#####  FIELDS   #####
+#####################
+
+service-fields:
+  configuration: {}
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+
+#####################
+#### GEOLOCATION ####
+#####################
+
+service-geolocation:
+  configuration: {}
+  replicaCount: 1
+  resources:
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
+
+#####################
+#####  HOTSPOT  #####
+#####################
+
+service-hotspot:
+  configuration: {}
+  replicaCount: 2
+
+#####################
+######   JOBS   #####
+#####################
+
+service-jobs:
+  configuration: {}
+  replicaCount: 2
+  resources:
+    limits:
+      memory: "600Mi"
+      cpu: "500m"
+    requests:
+      memory: "600Mi"
+      cpu: "50m"
+
+#####################
+##### LICENSES  #####
+#####################
+
+service-licenses:
+  configuration:
+    features:
+      default:
+        enabled: true
+      licensingApiSwitchByAccount:
+        enabled: false
+      licensingMigrationScopeAllData:
+        enabled: true
+    licenses:
+      billing-email: "manuel.schwandt@lancom.de"
+      supported-keys:
+        - KEY_LMC_DEVELOPMENT
+        - KEY_LMC_A
+    services:
+      cron:
+        startupDelaySeconds: 10
+    jobs:
+      scheduler:
+        startupDelaySeconds: 10
+  replicaCount: 2
+  resources:
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+    requests:
+      memory: "1Gi"
+      cpu: "50m"
+
+#####################
+#####  LOGGING  #####
+#####################
+
+service-logging:
+  configuration: {}
+  replicaCount: 2
+  resources:
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+    requests:
+      memory: "512Mi"
+      cpu: "50m"
+
+#####################
+##### MESSAGING #####
+#####################
+
+service-messaging:
+  configuration: {}
+  mailConfig:
+    smtpHost: "mail.your-server.de" # mandatory
+    smtpSecretName: "smtp-credentials"
+    smtpEncryption: "STARTTLS" # optional
+    smtpPort: 587
+    smtpTLSVersion: "V2" # optional
+    smtpSender: "\"LMC DEMO\" <lmc-demo@lancom.dev>"
+  baseUrl: "https://demo.lancom.dev"
+  replicaCount: 2
+
+#####################
+######   MRA   ######
+#####################
+
+service-mobile-rollout-assistant:
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+    requests:
+      cpu: "200m"
+      memory: "512Mi"
+
+#####################
+##### MONITORING ####
+#####################
+
+service-monitoring:
+  configuration: {}
+  kafka:
+    configMapRef: kafka-connection-params
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: "1"
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 1512Mi
+
+service-monitor-frontend:
+  replicaCount: 2
+  debug:
+    remote: true
+  configuration:
+    clickHouseRecords:
+      accountIds:
+        - 797da72a-e800-4eca-bf63-6cfb8a3fedf1
+      records:
+        lan_info_json: GA
+        wan_info_json: GA
+        wlan_info_json: GA
+        vpn_info_json: GA
+        phone_info: GA
+        dhcp_info: GA
+
+service-monitor-device-data:
+  kafka:
+    entryServiceTopic: service-monitor-entry.thrift
+
+#####################
+#### NOTIFICATION ###
+#####################
+
+service-notification:
+  configuration: {}
+  replicaCount: 1
+  resources:
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+    requests:
+      memory: "500Mi"
+      cpu: "50m"
+
+#####################
+###### PAIRING ######
+#####################
+
+service-pairing:
+  configuration: {}
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 50m
+      memory: 500Mi
+
+#####################
+#### PREFERENCES ####
+#####################
+
+service-preferences:
+  configuration: {}
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 1
+      memory: 600Mi
+    requests:
+      cpu: 50m
+      memory: 600Mi
+
+#####################
+### UF-TRANSLATOR ###
+#####################
+
+service-uf-translator:
+  configuration: {}
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 50m
+      memory: 300Mi
+
+#####################
+######    UI   ######
+#####################
+
+service-ui:
+  configuration: {}
+  features: {}
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 50m
+      memory: 300Mi
+  csp:
+    devicetunnel:
+      webconfig:
+        domain: "*.devicetunnel.demo.lancom.dev"
+
+#####################
+####  DATABASES  ####
+#####################
+
+#####################
+#### POSTGRESQL  ####
+#####################
+
+postgres:
+  host: psql-lmc
+postgresqlZPO:
+  enabled: true
+  volume:
+    size: 30Gi
+    storageClassName: "sys11-quobyte-external-provisioner"
+
+#####################
+###### ActiveMQ #####
+#####################
+
+activemq:
+  storageClass: sys11-quobyte-external-provisioner
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: "2"
+      memory: 4Gi
+    requests:
+      cpu: 100m
+      memory: 512Mi
+
+#####################
+##### Cassandra #####
+#####################
+
+cassandra:
+  storageClass: sys11-quobyte-external-provisioner
+  resources:
+    limits:
+      cpu: "2"
+      memory: 4Gi
+    requests:
+      cpu: 100m
+      memory: 2Gi
+
+#####################
+#### Clickhouse  ####
+#####################
+
+lmc-clickhouse:
+  users:
+    user-operator:
+      password_secret: clickhouse-user-operator-password
+  config:
+    distributedProductMode: local
+  podDistribution:
+    - type: ShardAntiAffinity
+    - type: MaxNumberPerNode
+      number: 1
+      # Apply podDistribution on per-host basis
+      topologyKey: "kubernetes.io/hostname"
+  enableDropProtection: false
+  image:
+    pullPolicy: IfNotPresent
+    repository: clickhouse/clickhouse-server
+    tag: 23.7.1.2470
+  keeper:
+    nodes:
+      - host: lmc-zookeeper-headless
+        port: 2181
+  layout:
+    replicasCount: 2
+    shardsCount: 1
+  volumes:
+    data:
+      size: 30Gi
+    log:
+      size: 15Gi
+  configurationFiles:
+    # Configuration options from https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md
+    # They sometimes differ from the standard configuration options
+    # e.g. fetch.max.wait.ms (standard) vs fetch.wait.max.ms (librdkafka)
+    conf.d/kafka.xml: |
+      <clickhouse>
+        <kafka>
+          <!-- Global configuration options for all tables of Kafka engine type -->
+          <debug>cgrp</debug>
+          <session_timeout_ms>45000</session_timeout_ms>
+          <heartbeat_interval_ms>3000</heartbeat_interval_ms>
+          <max_poll_interval_ms>60000</max_poll_interval_ms>
+          <request_timeout_ms>30000</request_timeout_ms>
+          <!-- Default: 1 -->
+          <fetch_min_bytes>1000000</fetch_min_bytes>
+          <fetch_max_bytes>52428800</fetch_max_bytes>
+          <!-- Default: 500 -->
+          <fetch_wait_max_ms>1000</fetch_wait_max_ms>
+          <socket_timeout_ms>60000</socket_timeout_ms>
+        </kafka>
+      </clickhouse>
+
+#####################
+##### Zookeeper #####
+#####################
+
+lmc-zookeeper:
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests:
+      memory: 256Mi
+      cpu: 250m
+  #dataLogDir: /zookeeper/logs
+  persistence:
+    size: 1Gi # dataDir
+    dataLogDir:
+      size: 1Gi
+  autopurge:
+    purgeInterval: 1%
+  zookeeper:
+    networkPolicy:
+      enabled: false
+#####################
+####### INFRA  ######
+#####################
+
+#####################
+####### PROXY #######
+#####################
+
+lmc-ingress:
+  monitorEntry:
+    enabled: true
+  migrationMirrorApi:
+    enabled: true
+  externalDNS:
+    enabled: true
+  certmanager:
+    clusterIssuer: "letsencrypt-prod"
+  base:
+    url: "demo.lancom.dev"
+    ingressClassName: "nginx"
+    tls:
+      enabled: true
+      secretName: "ui-and-api-tls"
+    enableFilters: true
+  control:
+    authTLSSecret: "pairing-ca-cert"
+    enabled: true
+    url: "control.demo.lancom.dev"
+    ingressClassName: "nginx"
+    tls:
+      secretName: "lancom-device-cert"
+  pairing:
+    enabled: true
+    url: "pairing.demo.lancom.dev"
+    ingressClassName: "nginx"
+    tls:
+      secretName: "lancom-device-cert"
+  devicetunnel:
+    enabled: true
+    url: "devicetunnel.demo.lancom.dev"
+    ingressClassName: "nginx"
+    tls:
+      secretName: "devicetunnel-tls"
+
+nginx:
+  replicaCount: 2
+  podAntiAffinityPreset: hard
+  service:
+    type: ClusterIP
+    externalTrafficPolicy: Local
+  metrics:
+    enabled: false
+  podAnnotations:
+    # increase the pod annotation whenever the log exporter config changes
+    logExporter/configVersion: "2"
+  serverBlock: |-
+    log_format upstream_time '$remote_addr - $upstream_addr - $http_referer - $remote_user [$time_local] '
+                     '"$request" $status $body_bytes_sent '
+                     '"$http_referer" "$http_user_agent" '
+                     'rt="$request_time" uct="$upstream_connect_time" uht="$upstream_header_time" urt="$upstream_response_time"';
+    
+    # required for logs in location /mirror, since nginx' default for internal traffic is: no logs
+    log_subrequest on;
+    
+    server {
+      listen 0.0.0.0:8080;
+    
+      resolver kube-dns.kube-system.svc.cluster.local ipv6=off valid=1s;
+    
+      include  "/opt/bitnami/nginx/conf/bitnami/*.conf";
+    
+      # https://nginx.org/en/docs/http/ngx_http_core_module.html#location
+      # processing order is check prefix -> remember longest match -> check regex
+      # if regex match use regex match else use remembered prefix match
+    
+      location ~* (/accounts/.*/records/) {
+        access_log syslog:server=127.0.0.1:5531 upstream_time;
+        access_log "/opt/bitnami/nginx/logs/access.log" upstream_time;
+    
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header X-FOO "BAR";
+        proxy_socket_keepalive on;
+    
+        set $frontend service-monitor-frontend.lmc.svc.cluster.local:8080;
+        proxy_pass http://$frontend$request_uri;
+      }
+    
+      location / {
+        access_log syslog:server=127.0.0.1:5532 upstream_time;
+    
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header X-Mirror true;
+        proxy_socket_keepalive on;
+    
+        set $legacy service-monitoring.lmc.svc.cluster.local:8080;
+        proxy_pass http://$legacy$request_uri;
+      }
+    
+    }
+
+  extraVolumes:
+    - name: exporter-config
+      configMap:
+        name: monitoring-api-nodeport-log-exporter-config
+    - name: nginx-config
+      configMap:
+        name: monitoring-api-nodeport-nginx-config
+
+  extraVolumeMounts:
+    - name: exporter-config
+      mountPath: /etc/prometheus-nginxlog-exporter
+    - name: nginx-config
+      mountPath: /opt/bitnami/nginx/conf/nginx.conf
+      subPath: nginx.conf
+
+  sidecars:
+    - name: prometheus-nginxlog-exporter
+      image: quay.io/martinhelmich/prometheus-nginxlog-exporter:v1
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        httpGet:
+          path: /metrics
+          port: log-metrics
+          scheme: HTTP
+      readinessProbe:
+        httpGet:
+          path: /metrics
+          port: log-metrics
+          scheme: HTTP
+      ports:
+        - name: log-metrics
+          containerPort: 4040
+      args: [ "-config-file", "/etc/prometheus-nginxlog-exporter/config.hcl" ]
+      volumeMounts:
+        - name: exporter-config
+          mountPath: /etc/prometheus-nginxlog-exporter
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 70000
+        runAsGroup: 70000
+
+#####################
+##### DISCOVERY  ####
+#####################
+
+server-discovery:
+  configuration:
+    eureka:
+      server:
+        responseCacheUpdateIntervalMs: 500
+        evictionIntervalTimerInMs: 500
+
+#####################
+######  svc-ua ######
+#####################
+
+service-useragent:
+  replicaCount: 1
+

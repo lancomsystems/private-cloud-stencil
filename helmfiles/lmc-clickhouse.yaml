@@ -1,0 +1,22 @@
+repositories:
+  - name: clickhouse-operator
+    url: https://docs.altinity.com/clickhouse-operator
+  - name: lancom-internal
+    url: https://packages.cloud.lancom.de:443/artifactory/internal-helm
+    username: devuser
+    password: {{ env "HELM_PASSWORD" }}
+
+releases:
+  - name: clickhouse-operator
+    namespace: clickhouse-operator
+    chart: clickhouse-operator/altinity-clickhouse-operator
+    version: 0.23.3
+    createNamespace: true
+    wait: true
+    values:
+      - ../values/clickhouse-operator-values.yaml
+  - name: clickhouse-user-operator
+    chart: lancom-internal/clickhouse-user-operator
+    namespace: clickhouse-operator
+    values:
+      - ../values/clickhouse-user-operator-values.yaml

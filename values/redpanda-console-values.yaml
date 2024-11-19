@@ -1,0 +1,50 @@
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 10m
+    memory: 64Mi
+
+secretMounts:
+  - name: kafka-certs
+    secretName: kafkauser-lmc-kafka-kafka-console
+    path: /etc/kafka/certs
+  - name: kafka-ca
+    secretName: lmc-kafka-cluster-ca-cert
+    path: /etc/kafka/ca
+
+console:
+  # See reference config: https://github.com/redpanda-data/console/blob/master/docs/config/console.yaml
+  config:
+    kafka:
+      brokers:
+        - lmc-kafka-kafka-bootstrap:9092
+      tls:
+        enabled: true
+        caFilepath: /etc/kafka/ca/ca.crt
+        certFilepath: /etc/kafka/certs/user.crt
+        keyFilepath: /etc/kafka/certs/user.key
+        passphrase: /etc/kafka/certs/user.password
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    # name of the secret that contains the user/password definitions
+    nginx.ingress.kubernetes.io/auth-secret: lmc-kafka-console-basic-auth-ingress
+    # message to display with an appropriate context why the authentication is required
+    nginx.ingress.kubernetes.io/auth-realm: Authentication Required
+    external-dns.alpha.kubernetes.io/hostname: kafka.demo.lancom.dev
+    external-dns.alpha.kubernetes.io/ttl: "10"
+  hosts:
+    - host: kafka.squad-delta.lancom.dev
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: kafka-tls
+      hosts:
+        - kafka.squad-delta.lancom.dev

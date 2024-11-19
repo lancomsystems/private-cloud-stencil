@@ -1,0 +1,39 @@
+repositories:
+  - name: strimzi
+    url: https://strimzi.io/charts/
+  - name: redpanda
+    url: https://charts.redpanda.com
+  - name: lancom-internal
+    url: https://packages.cloud.lancom.de:443/artifactory/internal-helm
+    username: {{ env "HELM_USERNAME" }}
+    password: {{ env "HELM_PASSWORD" }}
+
+releases:
+  - name: strimzi-operator-crds
+    chart: lancom-internal/strimzi-operator-crds
+    namespace: lmc-operators
+    wait: true
+    values:
+      - kubectlImage: bitnami/kubectl:1.23.5
+
+  - name: lmc-strimzi
+    chart: strimzi/strimzi-kafka-operator
+    namespace: lmc-operators
+    version: 0.38.0
+    values:
+      - ../values/strimzi-values.yaml
+    needs:
+      - lmc-operators/strimzi-operator-crds
+
+  - name: lmc-kafka-cluster
+    chart: lancom-internal/lmc-kafka
+    version: 2.6.0
+    namespace: lmc
+    values:
+      - ../values/kafka-values.yaml
+#  - name: lmc-kafka-console
+#    chart: redpanda/console
+#    version: 0.5.0
+#    namespace: lmc
+#    values:
+#      - ../values/redpanda-console-values.yaml

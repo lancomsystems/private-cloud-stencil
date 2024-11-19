@@ -1,0 +1,4 @@
+crds:
+  enabled: true
+dns01RecursiveNameserversOnly: true
+dns01RecursiveNameservers: "213.133.100.98:53,88.198.229.192:53,193.47.99.5:53" # hydrogen.ns.hetzner.com., oxygen.ns.hetzner.com., helium.ns.hetzner.de.

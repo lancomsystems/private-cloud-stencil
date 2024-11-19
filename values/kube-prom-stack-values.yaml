@@ -1,0 +1,114 @@
+crds:
+  enabled: true
+
+defaultRules:
+  labels:
+    prometheus: prometheus-operator
+alertmanager:
+  enabled: false
+grafana:
+  enabled: false
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: basic-auth-ingress
+      nginx.ingress.kubernetes.io/auth-realm: Authentication Required
+      external-dns.alpha.kubernetes.io/ttl: "3600"
+    hosts:
+      - prometheus.demo.lancom.dev
+    tls:
+      - secretName: prometheus-tls
+        hosts:
+          - prometheus.demo.lancom.dev
+  retention: 1d
+  prometheusSpec:
+    #secrets: {}
+    # comment etcd-certs if you install on GCP or AWS
+    # Watch all namespaces for PodMonitors and ServiceMonitors, except ones labeled with "no-prometheus"
+    podMonitorSelector:
+      matchExpressions:
+        - {key: no-prometheus, operator: DoesNotExist, values: []}
+    podMonitorNamespaceSelector:
+      matchExpressions:
+        - {key: no-prometheus, operator: DoesNotExist, values: []}
+    serviceMonitorNamespaceSelector:
+      matchExpressions:
+        - {key: no-prometheus, operator: DoesNotExist, values: []}
+    serviceMonitorSelector:
+      matchExpressions:
+        - {key: no-prometheus, operator: DoesNotExist, values: []}
+    ## Rules configmap selector
+    ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/design.md
+    ##
+    ruleNamespaceSelector:
+      matchExpressions:
+        - {key: no-prometheus, operator: DoesNotExist, values: []}
+    ruleSelector:
+      matchExpressions:
+        - key: prometheus
+          operator: In
+          values:
+            - lmc
+            - prometheus-operator
+
+    ## Prometheus StorageSpec for persistent data
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/storage.md
+    ##
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          #if a storage controller is in use, the storageClassName can be set or the default class will be used
+          #storageClassName:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 15Gi
+    walCompression: true
+  additionalServiceMonitors:
+    - name: lmc-service-monitor
+      namespaceSelector:
+        any: true
+      selector:
+        matchLabels:
+          tier: lmc
+      endpoints:
+        - port: http
+          interval: 10s
+          path: /management/prometheus
+    - name: lmc-service-monitor-stateful
+      namespaceSelector:
+        any: true
+      selector:
+        matchLabels:
+          tier: lmc-static
+      endpoints:
+        - port: prometheus-jmx
+          interval: 10s
+          path: /metrics
+    - name: lmc-service-monitor-postgres
+      namespaceSelector:
+        any: true
+      selector:
+        matchLabels:
+          tier: lmc-static
+          app: postgres
+      endpoints:
+        - port: prometheus
+          interval: 10s
+          path: /metrics
+    - name: haproxy-tls-metrics
+      namespaceSelector:
+        any: true
+      selector:
+        matchLabels:
+          app: haproxy-tls
+          tier: lmc-static
+      endpoints:
+        - port: prometheus-metrics
+          interval: 10s
+          path: /metrics
+

@@ -1,0 +1,9 @@
+helmfiles:
+  - path: helmfiles/external-dns.yaml
+  - path: helmfiles/ingress-nginx.yaml
+  - path: helmfiles/cert-manager.yaml
+  - path: helmfiles/kube-prom-stack.yaml
+  - path: helmfiles/zalando-psql-op.yaml
+  - path: helmfiles/lmc-kafka.yaml
+  - path: helmfiles/lmc-clickhouse.yaml
+  - path: helmfiles/lmc.yaml

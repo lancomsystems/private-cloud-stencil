@@ -1,0 +1,24 @@
+installKafkaConsoleSecret: true
+
+kafka:
+  replicas: 3
+  version: 3.5.0 # same version as your kafka library
+  config:
+    log.message.format.version: "3.5" # same version as your kafka library
+    min.insync.replicas: 1
+    default.replication.factor: 1
+  authorization:
+    type: simple
+  listeners:
+    - name: tls
+      port: 9092
+      type: internal
+      tls: true
+      authentication:
+        type: tls
+zookeeper:
+  image: docker.packages.cloud.lancom.de/strimzi/kafka:0.38.0-3.5.1-zookeeper-prometheus-3529640
+  template:
+    pod:
+      imagePullSecrets:
+        - name: packages-cloud-lancom-de

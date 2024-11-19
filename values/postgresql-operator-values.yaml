@@ -1,0 +1,5 @@
+configKubernetes:
+  delete_annotation_date_key: delete-date
+  delete_annotation_name_key: delete-clustername
+imagePullSecrets:
+  - name: packages-cloud-lancom-de

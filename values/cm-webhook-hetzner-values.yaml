@@ -1,0 +1,11 @@
+groupName: acme.lancom.dev
+certManager:
+  namespace: cert-manager
+  serviceAccountName: cert-manager
+
+image:
+  registry: ghcr.io
+  repository: vadimkim/cert-manager-webhook-hetzner
+
+secretName:
+  - hetzner-credentials

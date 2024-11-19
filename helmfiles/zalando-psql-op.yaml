@@ -1,0 +1,11 @@
+repositories:
+  - name: zalando
+    url: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+
+releases:
+  - name: postgres-operator
+    chart: zalando/postgres-operator
+    version: 1.10.1
+    namespace: postgres-operator
+    values:
+      - ../values/postgresql-operator-values.yaml

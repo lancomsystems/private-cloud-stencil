@@ -1,0 +1,12 @@
+repositories:
+  - name: lancom-zero
+    url: https://packages.cloud.lancom.de:443/artifactory/helm-test
+    username: {{ env "HELM_USERNAME" }}
+    password: {{ env "HELM_PASSWORD" }}
+
+releases:
+  - name: lmc
+    chart: lancom-zero/lmc
+    namespace: lmc
+    values:
+      - ../values/lmc-values.yaml

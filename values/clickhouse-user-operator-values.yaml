@@ -1,0 +1,4 @@
+image:
+  pullSecret: packages-cloud-lancom-de
+clickhouse:
+  passwordSecret: clickhouse-user-operator-password

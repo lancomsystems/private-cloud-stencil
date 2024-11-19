@@ -1,0 +1,5 @@
+environments:
+  demo:
+    values:
+      - # With 'dnsProvider' you can set to be HETZNER or IONOS
+        dnsProvider: 'HETZNER'

@@ -1,10 +1,19 @@
 helmfiles:
-  - path: helmfiles/external-dns.yaml
+# Uncomment the optional components you want to install.
+
+# Domain and Frontend Cert Helper (optional):
+#  - path: helmfiles/external-dns.yaml
+#  - path: helmfiles/cert-manager.yaml
+
+# Monitoring (optional):
+#  - path: helmfiles/kube-prom-stack.yaml
+
+# Dependencies of LMC:
   - path: helmfiles/ingress-nginx.yaml
-  - path: helmfiles/cert-manager.yaml
   - path: helmfiles/longhorn
-  - path: helmfiles/kube-prom-stack.yaml
-  - path: helmfiles/zalando-psql-op.yaml
+  - path: helmfiles/lmc-postgresql.yaml
   - path: helmfiles/lmc-kafka.yaml
   - path: helmfiles/lmc-clickhouse.yaml
+
+# LMC:
   - path: helmfiles/lmc.yaml

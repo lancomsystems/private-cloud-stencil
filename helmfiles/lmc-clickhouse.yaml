@@ -7,7 +7,7 @@ repositories:
     password: {{ env "HELM_PASSWORD" }}
 
 releases:
-  - name: clickhouse-operator
+  - name: altinity
     namespace: operator-clickhouse
     chart: clickhouse-operator/altinity-clickhouse-operator
     version: 0.23.3

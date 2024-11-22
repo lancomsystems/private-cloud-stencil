@@ -9,14 +9,7 @@ repositories:
     password: {{ env "HELM_PASSWORD" }}
 
 releases:
-  - name: strimzi-operator-crds
-    chart: lancom-internal/strimzi-operator-crds
-    namespace: operators-kafka
-    wait: true
-    values:
-      - kubectlImage: bitnami/kubectl:1.23.5
-
-  - name: lmc-strimzi
+  - name: strimzi
     chart: strimzi/strimzi-kafka-operator
     namespace: operator-kafka
     version: 0.38.0

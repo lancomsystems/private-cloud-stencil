@@ -3,10 +3,6 @@ repositories:
     url: https://strimzi.io/charts/
   - name: redpanda
     url: https://charts.redpanda.com
-  - name: lancom-internal
-    url: https://packages.cloud.lancom.de:443/artifactory/internal-helm
-    username: {{ env "HELM_USERNAME" }}
-    password: {{ env "HELM_PASSWORD" }}
 
 releases:
   - name: strimzi
@@ -17,13 +13,6 @@ releases:
       - ../values/strimzi-values.yaml
     needs:
       - lmc-operators/strimzi-operator-crds
-
-  - name: lmc-kafka-cluster
-    chart: lancom-internal/lmc-kafka
-    version: 2.6.0
-    namespace: lmc
-    values:
-      - ../values/kafka-values.yaml
 
 #  - name: lmc-kafka-console
 #    chart: redpanda/console

@@ -1,8 +1,6 @@
 #####################
 ####### USAGE #######
 #####################
-
-# For skaffolding toggle services here:
 use:
   activemq: true
   arc: true
@@ -46,7 +44,6 @@ use:
 #####################
 #### MAINTENANCE ####
 #####################
-
 # Setting this true, will disrupt the 'use' section.
 # If not wanted keep it commented out!
 # If uncomment all services with connection to Postgresql off.
@@ -57,7 +54,6 @@ use:
 #####################
 ###### GLOBAL  ######
 #####################
-
 global:
   # To turn on the API Usage Collection you should turn on 'apiUsageCollection.filter'
   # Hint: Kafka is required to use this!
@@ -104,7 +100,6 @@ ignored-random: 11111111
 #####################
 ######   ARC   ######
 #####################
-
 service-arc:
   replicaCount: 1
   resources:
@@ -118,7 +113,6 @@ service-arc:
 #####################
 ######   AUTH  ######
 #####################
-
 service-auth:
   debuggingPortOpen: true
   configuration:
@@ -136,7 +130,6 @@ service-auth:
 #####################
 ##### BACKSTAGE #####
 #####################
-
 service-backstage:
   replicaCount: 2
   resources:
@@ -150,7 +143,6 @@ service-backstage:
 #####################
 #### CLIENTACCESS ###
 #####################
-
 service-clientaccess:
   environment:
     jwtSecret: TestTestTest
@@ -165,7 +157,6 @@ service-clientaccess:
 #####################
 #####  CONFIG  ######
 #####################
-
 service-config:
   configuration:
     features:
@@ -187,7 +178,6 @@ service-config:
 #####################
 #####  CONTROL  #####
 #####################
-
 service-control:
   configuration: {}
   replicaCount: 2
@@ -202,7 +192,6 @@ service-control:
 #####################
 #####  DEVICES  #####
 #####################
-
 service-devices:
   configuration: {}
   replicaCount: 2
@@ -217,7 +206,6 @@ service-devices:
 #####################
 ### DEVICETUNNEL ####
 #####################
-
 service-devicetunnel:
   configuration: {}
   replicaCount: 2
@@ -230,9 +218,18 @@ service-devicetunnel:
       memory: 512Mi
 
 #####################
+##### DISCOVERY  ####
+#####################
+server-discovery:
+  configuration:
+    eureka:
+      server:
+        responseCacheUpdateIntervalMs: 500
+        evictionIntervalTimerInMs: 500
+
+#####################
 ######   DSC   ######
 #####################
-
 service-dsc-alpha:
   configuration: {}
   replicaCount: 1
@@ -247,7 +244,6 @@ service-dsc-alpha:
 #####################
 #####  DYNDNS   #####
 #####################
-
 service-dyndns:
   configuration: {}
   replicaCount: 0
@@ -255,7 +251,6 @@ service-dyndns:
 #####################
 #####  FIELDS   #####
 #####################
-
 service-fields:
   configuration: {}
   replicaCount: 1
@@ -270,7 +265,6 @@ service-fields:
 #####################
 #### GEOLOCATION ####
 #####################
-
 service-geolocation:
   configuration: {}
   replicaCount: 1
@@ -285,7 +279,6 @@ service-geolocation:
 #####################
 #####  HOTSPOT  #####
 #####################
-
 service-hotspot:
   configuration: {}
   replicaCount: 2
@@ -293,7 +286,6 @@ service-hotspot:
 #####################
 ######   JOBS   #####
 #####################
-
 service-jobs:
   configuration: {}
   replicaCount: 2
@@ -308,7 +300,6 @@ service-jobs:
 #####################
 ##### LICENSES  #####
 #####################
-
 service-licenses:
   configuration:
     features:
@@ -341,7 +332,6 @@ service-licenses:
 #####################
 #####  LOGGING  #####
 #####################
-
 service-logging:
   configuration: {}
   replicaCount: 2
@@ -356,7 +346,6 @@ service-logging:
 #####################
 ##### MESSAGING #####
 #####################
-
 service-messaging:
   configuration: {}
   mailConfig:
@@ -372,7 +361,6 @@ service-messaging:
 #####################
 ######   MRA   ######
 #####################
-
 service-mobile-rollout-assistant:
   replicaCount: 1
   resources:
@@ -386,7 +374,6 @@ service-mobile-rollout-assistant:
 #####################
 ##### MONITORING ####
 #####################
-
 service-monitoring:
   configuration: {}
   kafka:
@@ -423,7 +410,6 @@ service-monitor-device-data:
 #####################
 #### NOTIFICATION ###
 #####################
-
 service-notification:
   configuration: {}
   replicaCount: 1
@@ -438,7 +424,6 @@ service-notification:
 #####################
 ###### PAIRING ######
 #####################
-
 service-pairing:
   configuration: {}
   replicaCount: 1
@@ -453,7 +438,6 @@ service-pairing:
 #####################
 #### PREFERENCES ####
 #####################
-
 service-preferences:
   configuration: {}
   replicaCount: 1
@@ -468,7 +452,6 @@ service-preferences:
 #####################
 ### UF-TRANSLATOR ###
 #####################
-
 service-uf-translator:
   configuration: {}
   replicaCount: 2
@@ -483,7 +466,6 @@ service-uf-translator:
 #####################
 ######    UI   ######
 #####################
-
 service-ui:
   configuration: {}
   features: {}
@@ -501,13 +483,18 @@ service-ui:
         domain: "*.devicetunnel.demo.lancom.dev"
 
 #####################
+######  svc-ua ######
+#####################
+service-useragent:
+  replicaCount: 1
+
+#####################
 ####  DATABASES  ####
 #####################
 
 #####################
 #### POSTGRESQL  ####
 #####################
-
 postgres:
   host: psql-lmc
 postgresqlZPO:
@@ -519,7 +506,6 @@ postgresqlZPO:
 #####################
 ###### ActiveMQ #####
 #####################
-
 activemq:
   storageClass: "md2"
   replicaCount: 2
@@ -534,7 +520,6 @@ activemq:
 #####################
 ##### Cassandra #####
 #####################
-
 cassandra:
   storageClass: "md1"
   resources:
@@ -793,22 +778,3 @@ nginx:
         runAsNonRoot: true
         runAsUser: 70000
         runAsGroup: 70000
-
-#####################
-##### DISCOVERY  ####
-#####################
-
-server-discovery:
-  configuration:
-    eureka:
-      server:
-        responseCacheUpdateIntervalMs: 500
-        evictionIntervalTimerInMs: 500
-
-#####################
-######  svc-ua ######
-#####################
-
-service-useragent:
-  replicaCount: 1
-

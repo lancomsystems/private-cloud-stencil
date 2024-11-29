@@ -548,10 +548,8 @@ cassandra:
 #####################
 #####   Kafka   #####
 #####################
-
 lmc-kafka:
   installKafkaConsoleSecret: true
-
   kafka:
     replicas: 3
     version: 3.5.0 # same version as your kafka library

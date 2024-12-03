@@ -126,6 +126,11 @@ service-auth:
     requests:
       cpu: 100m
       memory: 768Mi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 
 #####################
 ##### BACKSTAGE #####
@@ -174,6 +179,11 @@ service-config:
     requests:
       cpu: 100m
       memory: 2Gi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 
 #####################
 #####  CONTROL  #####
@@ -188,6 +198,11 @@ service-control:
     requests:
       cpu: 50m
       memory: 512Mi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 
 #####################
 #####  DEVICES  #####
@@ -202,6 +217,11 @@ service-devices:
     requests:
       cpu: 100m
       memory: 1Gi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 
 #####################
 ### DEVICETUNNEL ####
@@ -386,6 +406,11 @@ service-monitoring:
     requests:
       cpu: 100m
       memory: 1512Mi
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 
 service-monitor-frontend:
   replicaCount: 2
@@ -402,6 +427,11 @@ service-monitor-frontend:
         vpn_info_json: GA
         phone_info: GA
         dhcp_info: GA
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 
 service-monitor-device-data:
   kafka:
